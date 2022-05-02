@@ -52,12 +52,12 @@ dict = {'area':[71,82,75.5,46,144.41,90,98,104,68,45,104,95,46,40,55,45,100,74,6
                     'khirdalan','nizami','ganja','4th_micro','ahmadli','nasimi','khirdalan','sumgayit','4th_micro','khirdalan','8th_micro','masazir','sumgayit','masazir','new_yasamal',
                     'khirdalan','khirdalan','ahmadli','9th_micro','binaqadi','ahmadli','mingachevir','nasimi','nasimi','mashtagha','binaqadi','hazi_aslanov'],
         'rooms':[2,2,3,1,3,3,2,3,2,1,3,2,2,2,3,2,4,2,2,2,3,2,2,2,4,2,2,1,1,2,2,2,3,2,3,2,3,2,2,2,3],
-        'state_of_building':['new','new','old','new','new','new','new','new','old','new','new','new','old','old','new','old','old','mew','new','new','new','old','old','new','new','new','old',
+        'state_of_building':['new','new','old','new','new','new','new','new','old','new','new','new','old','old','new','old','old','new','new','new','new','old','old','new','new','new','old',
                              'new','new','new','old','new','new','new','new','old','new','new','old','old','new'],
         'price':[122000,93000,67000,16500,137900,100000,179000,185000,83000,34000,125000,123000,51000,59900,57000,48500,56000,13000,95000,98000,57000,50000,60000,45000,184000,62000,53000,
                  47000,58500,35000,43000,95000,173000,120000,140000,36500,190000,144000,22000,82000,119000]
         }
-df = pd.DataFrame(dict)
+"""df = pd.DataFrame(dict)
 reg = linear_model.LinearRegression()
 reg.fit(df[['area']],df[['price']])
 with open('reg_model_pickle', 'wb') as f:
@@ -66,5 +66,16 @@ print(reg.predict([[80]]))
 plt.scatter(df[['area']],df[['price']], color='red', marker='+')
 plt.plot(df[['area']], reg.predict(df[['area']]), color="blue")
 plt.axhline(y=64000)
-plt.show()
-
+plt.show()"""
+pd.set_option('max_columns', None)
+df = pd.DataFrame(dict)
+dummy = pd.get_dummies(df)
+X = dummy.drop(['price', 'location_2nd_micro', 'state_of_building_old'], axis='columns')
+y = df.price
+model = linear_model.LinearRegression()
+model.fit(X,y)
+with open('model_area_price', 'wb') as f:
+    pickle.dump(model, f)
+print(X.head())
+print(model.predict([[71,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1]]))
+print(model.score(X,y))

@@ -198,3 +198,4 @@ def printer(msg):
 print(printer("Sikdir"))"""
 """concat_names = lambda x, y: x.strip() + " "+ y.strip()
 print(concat_names("Kamil", "Hashimov"))"""
+
